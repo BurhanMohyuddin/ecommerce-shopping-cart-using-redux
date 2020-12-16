@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
+import {removeFromCart} from '../Actions/cartActions';
 
-export default class Basket extends Component {
+class Basket extends Component {
     render() {
         const {cartItems} = this.props;
         return (
@@ -11,13 +13,14 @@ export default class Basket extends Component {
                     <ul>
                         {cartItems.map(item => 
                             <li key={item.id}>
-                                <b>{item.title}</b>
-                                X{+ ' '} {item.count} = P={item.price * item.count}
+                                <b>{item.title + ' '}</b>
+                                 x {item.count} = ${item.price.toFixed(2) * item.count}
+                                <br/>
                                 <button className="btn btn-danger" 
-                                onClick={(e) => this.props.handleRemoveFromCart(e, item)}>X</button>
+                                onClick={(e) => this.props.removeFromCart(this.props.cartItems, item)}>X</button>
                             </li>)}
                     </ul>
-                    Total: {cartItems.reduce((a,c) => a + c.price * c.count, 0).toFixed(2)}
+                    Total: ${cartItems.reduce((a,c) => a + c.price * c.count, 0).toFixed(2)}
                 </div>
                 }<hr/>
                 <div className="text-center">
@@ -27,3 +30,9 @@ export default class Basket extends Component {
         )
     }
 }
+
+const mapStateToProps= state => ({
+    cartItems: state.cart.items
+})
+
+export default connect(mapStateToProps, {removeFromCart})(Basket);

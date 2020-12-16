@@ -7,74 +7,13 @@ import store from './store';
 import './App.css';
 
 class App extends Component {
-  constructor(props){
-    super(props);
-    this.state = {products: [], filteredProducts: [], cartItems: []};
-    this.handleChangeSort = this.handleChangeSort.bind(this);
-    this.handleChangeSize = this.handleChangeSize.bind(this);
-    this.handleAddToCart = this.handleAddToCart.bind(this);
-    this.handleRemoveFromCart = this.handleRemoveFromCart.bind(this);
-  }
+  
 
   componentDidMount(){
     
     if(localStorage.getItem('cartItems')){
       this.setState({cartItems: JSON.parse(localStorage.getItem('cartItems'))});
     }
-  }
-
-
-  handleChangeSort(e){
-    this.setState({sort: e.target.value});
-    this.listProducts();
-  }
-
-  handleChangeSize(e){
-    this.setState({size: e.target.value});
-    this.listProducts();
-  }
-
-  listProducts(){
-    this.setState(state => {
-      if(state.sort!== ''){
-        state.products.sort((a,b)=> (state.sort==='lowest')?(a.price > b.price ? 1 : -1):(a.price < b.price ? 1: -1))
-      }else{
-        state.products.sort((a,b)=>(a.id > b.id ? 1 : -1))
-      }
-      if(state.size!== ''){
-        return {filteredProducts: state.products.filter(a => 
-          a.availableSizes.indexOf(state.size.toUpperCase()) !== -1
-          )}
-      }
-
-      return {filteredProducts: state.products};
-    })
-  }
-
-  handleAddToCart(e, product){
-    this.setState(state => {
-     const cartItems= state.cartItems;
-     let productAlreadyExists = false;
-     cartItems.forEach(item => {
-       if(item.id === product.id){
-         productAlreadyExists = true;
-         item.count++;
-       }
-     });
-     if(!productAlreadyExists){
-       cartItems.push({...product, count:1});
-     }
-     localStorage.setItem('cartItems',JSON.stringify(cartItems));
-     return cartItems;
-    })
-  }
-
-  handleRemoveFromCart(e, item){
-    this.setState(state => {
-      const cartItems = state.cartItems.filter(val => val.id !== item.id);
-      localStorage.setItem('cartItems', cartItems);
-      return {cartItems};
-    })
   }
   
   render() {
@@ -85,14 +24,12 @@ class App extends Component {
         <hr/>
         <div className="row">
           <div className="col-md-8">
-            <Filters sort={this.state.sort} size={this.state.size} 
-            handleChangeSize={this.handleChangeSize} handleChangeSort={this.handleChangeSort}
-            count={this.state.filteredProducts.length}/>
+            <Filters />
             <hr/>
-            <Products products={this.state.filteredProducts} handleAddToCart={this.handleAddToCart}/>
+            <Products />
           </div>
           <div className="col-md-4">
-            <Basket cartItems={this.state.cartItems} handleRemoveFromCart={this.handleRemoveFromCart}/>
+            <Basket />
           </div>
         </div>
       </div>
