@@ -14,17 +14,17 @@ class Basket extends Component {
                         {cartItems.map(item => 
                             <li key={item.id}>
                                 <b>{item.title + ' '}</b>
-                                 x {item.count} = ${item.price.toFixed(2) * item.count}
+                                 x {item.count} = ${(item.price * item.count).toFixed(2)}
                                 <br/>
-                                <button className="btn btn-danger" 
+                                <button className="btn btn-danger btn-sm" style={{borderRadius:"5px"}} 
                                 onClick={(e) => this.props.removeFromCart(this.props.cartItems, item)}>X</button>
                             </li>)}
                     </ul>
-                    Total: ${cartItems.reduce((a,c) => a + c.price * c.count, 0).toFixed(2)}
+                    Total:{" "} ${cartItems.reduce((a,c) => a + c.price * c.count, 0).toFixed(2)}
                 </div>
                 }<hr/>
                 <div className="text-center">
-                    <button className="btn btn-primary" onClick={()=> alert("Need to implement..")}>Checkout</button>
+                    <button className="btn btn-primary" onClick={()=> alert("Thanks For Shopping...")}>Checkout</button>
                 </div>
             </div>
         )
